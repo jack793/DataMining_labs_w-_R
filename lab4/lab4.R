@@ -79,3 +79,28 @@ sum((linf<1.5) & (lsup>1.5))/1000
 # b2=0 vs b2>0
 sum((b[,3]/se[,3])>qt(0.95,47))/1000
 
+
+
+
+################# LOGISTIC REGRESSION ###################
+
+data(mtcars)
+str(mtcars)
+
+## Reduce dataset on a subset of original one
+cars.data = mtcars[, c('mpg', 'vs', 'am')]
+cars.data
+
+# Refactor am to factor var for RStudio
+cars.data$am = as.factor(cars.data$am)
+is.factor(cars.data$am) # check
+
+# Boxplot
+boxplot(cars.data$mpg ~ cars.data$vs)
+  # vs , am are binary vars => boxplot show combination of them
+boxplot(cars.data$mpg ~ cars.data$vs*cars.data$am)
+
+
+### Create logistic model w/ GLM (generialize linear model)
+model1 = glm(vs~mpg*am, data = cars.data, family = binomial) # Variabile risposta è 0/1 quindi family=binomial setta regressione logistica
+summary(model1)
