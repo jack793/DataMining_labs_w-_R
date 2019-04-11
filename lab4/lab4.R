@@ -49,3 +49,24 @@ new.shelveloc = relevel(Carseats$ShelveLoc, ref = 'Good')
 # Riscriviamo il modello
 model2 = lm(Sales~Price+US+new.shelveloc, data = Carseats)
 summary(model2)
+
+
+### b1^ - b1/SE(b1^) ###
+set.seed(1234)
+X1 = rnorm(50)
+X2 = rnorm(50)
+b=se=matrix(nrow = 1000, ncol = 3)
+rse=rep(NA, 1000)
+
+for (i in 1:1000) {
+  Y = 3 + 1.5 * X1 + rnorm(50, sd=1.2)
+  dati=data.frame(y=Y, x1=X1, x2=X2)
+  fit = lm(y~x1+x2, data = dati)
+  b[i,]=coef(fit)
+  se[i,] = sqrt(diag(vcov(fit)))
+  rse[i]=sd(fit$residuals)*sqrt(49/47)
+}
+
+# cReaiamo un istogramma con curva di dispersione (t-student w/ 47 degrees of fredoom)
+hist((b[,2]-1.5)/se[,2], freq=F, n=25)
+curve(dt(x, 47), col=2, add=T, lwd=2)
