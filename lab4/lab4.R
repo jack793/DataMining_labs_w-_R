@@ -58,6 +58,7 @@ X2 = rnorm(50)
 b=se=matrix(nrow = 1000, ncol = 3)
 rse=rep(NA, 1000)
 
+# Ciclo for per la creazione del vero modello
 for (i in 1:1000) {
   Y = 3 + 1.5 * X1 + rnorm(50, sd=1.2)
   dati=data.frame(y=Y, x1=X1, x2=X2)
@@ -67,6 +68,14 @@ for (i in 1:1000) {
   rse[i]=sd(fit$residuals)*sqrt(49/47)
 }
 
-# cReaiamo un istogramma con curva di dispersione (t-student w/ 47 degrees of fredoom)
+# Creaiamo un istogramma con curva di dispersione (t-student w/ 47 degrees of fredoom)
 hist((b[,2]-1.5)/se[,2], freq=F, n=25)
 curve(dt(x, 47), col=2, add=T, lwd=2)
+# Aggiungiamo limiti sup ed inf
+linf = b[,2]+qt(0.025, 47)*se[,2]
+lsup = b[,2]+qt(0.975, 47)*se[,2]
+sum((linf<1.5) & (lsup>1.5))/1000
+
+# b2=0 vs b2>0
+sum((b[,3]/se[,3])>qt(0.95,47))/1000
+
