@@ -105,5 +105,22 @@ p.lda = rep(0, nrow(te.s))
 preds.lda
 p.lda[preds.lda$posterior[,2]>0.5] = 1
 addmargins(table(p.lda, vs=te.s$vs))
-p.lda           
-           
+p.lda
+
+p.lda2 = rep(0, nrow(te.s))
+p.lda2[preds.lda$posterior[,2]>0.2] = 1
+p.lda2
+
+
+# Add library pROc
+library(pROC)
+v.roc = roc(te.s$vs, preds.lda$posterior[,2])
+names(v.roc)
+plot(v.roc, legacy.axes = TRUE, print.auc=TRUE, auc.polygon=TRUE)
+
+# Quadratic Discriminant Analysis
+m.cq = qda(vs ~ mpg + am, data = tr.s)
+m.cq
+
+preds.qda = predict(m.cq, te.s)
+addmargins(table(preds.qda$class, vs=te.s$vs))
