@@ -95,3 +95,15 @@ library(MASS)
 
 m.cl = lda(vs ~ mpg + am, data = tr.s)
 m.cl
+
+# Plots
+plot(m.cl)
+
+# predictions
+preds.lda = predict(m.cl, te.s)
+p.lda = rep(0, nrow(te.s))
+preds.lda
+p.lda[preds.lda$posterior[,2]>0.5] = 1
+addmargins(table(p.lda, vs=te.s$vs))
+p.lda           
+           
