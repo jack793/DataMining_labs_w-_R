@@ -97,7 +97,7 @@ model = lm(Price ~ .,data = cars) # troppo complicato ha 23 cov.
 y = cars$Price
 X = model.matrix(Price ~ .,data = cars) # matrice di tutte le covariate (cosí peró includamo anche l'intercetta e non NON la vogliamo)
 
-X = model.matrix(Price ~ . - 1,data = cars) # cosi eliminiamo intercetta e otteniamo la X corretta!
+X = model.matrix(Price ~ . ,data = cars)[,-1] # cosi eliminiamo intercetta e otteniamo la X corretta!
 
 # modello RIDGE
 m_ridge = glmnet(X, y, alpha = 0) # alpha=0 : ridge
@@ -126,7 +126,7 @@ coef(m_lasso)
 ## interpretiamo (descrivendo un po i coefficenti) il modello lasso poiché e il piu semplice e quell con meno covariate considerate
 
 
-# possiamo anche confrontare i min.squared
+# possiamo anche confrontare i mean squared err.
 lasso_cv$cvm[which.min(lasso_cv$lambda)] # 0.05117485
 ridge_cv$cvm[which.min(ridge_cv$lambda)] # 0.04913806
 
